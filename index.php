@@ -1,61 +1,87 @@
 <?php
-  include 'include/config.php';
+  include_once 'include/config.php';
   include 'include/util.php';
+  include 'include/db.php';
   include 'include/header.html';
+
+  $logger = Logger::instance();
+  $logger->debug("Here's a debugging message");
+  $logger->debug(array("pi" => 3.14159, "e" => 2.71828, "i" => "SQRT(-1)"));
+  $logger->debug(array(2, 3, 5, 7, 11, array("pi" => 3.14159, "e" => 2.71828, "i" => "SQRT(-1)")));
+
+  $first_name = safeParam("first_name", "");
+  $last_name = safeParam("last_name", "");
 ?>
-
-<div class="row">
-  <div class="col-lg-12">
-    <h1>Hello world from PHP</h1>
-    <p>You can remix this project for a plain PHP starter. Some database is configured (see sample.sql), but none of the MVC framwork is here. You can write code directly in this file.</p>
-    <p>Here's a form that posts to itself!</p>
-  </div>
-</div>
-
-<div class="row" >
-  <div class="col-lg-12">
-    <div class="card">
-      <div class="card-body">
-        <form action="index.php" method="post">
-          <div class="form-group">
-            <div class="form-row">
-              <div class="col">
-                <label for="start">Enter a number between 1 and 50</label>
-                <input type="number" class="form-control" id="number" name="number" placeholder="Enter a number between 1 and 50" required value="<?php echo(safeParam($_REQUEST, 'number', '10')); ?>">
-              </div>
+  
+      <div class="row">
+        <div class="col-lg-12">
+          <p>Which student do you want to find?</p>
+          <form action="index.php" method="post">
+            <div class="form-group">
+              <label for="first_name">First name</label>
+              <input type="text" min="1" id="first_name" name="first_name" class="form-control" placeholder="Enter first name" value="<?php echo $first_name?>"/>
             </div>
-          </div>
-          <div class="form-group">
-            <div class="form-row mt-4 float-right">
-              <div class="btn-toolbar align-middle">
-                <button type="submit" class="btn btn-primary mr-1 d-flex justify-content-center align-content-between"><span class="material-icons">send</span>&nbsp;Submit</button>
-                <button class="btn btn-secondary mr-1 d-flex justify-content-center align-content-between" onclick="get('index.php')"><span class="material-icons">cancel</span>&nbsp;Cancel</button>
-              </div>
+            <div class="form-group">
+              <label for="last_name">Last name</label>
+              <input type="text" min="1" id="last_name" name="last_name" class="form-control" placeholder="Enter last name" value="<?php echo $last_name?>"/>
             </div>
-          </div>
-        </form>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+<?php
+  if ($last_name || $first_name):
+    $rows = findStudentByName($last_name, $first_name);
+    // could use findStudentByName2 or findStudentByName3
+    $logger->debug($rows);
+    if ($rows):
+?>
+      <div class="row">
+        <div class="col-lg-12">
+        <table class="table table-striped" border=1>
+          <thead class="thead-dark">
+            <tr>
+              <th>Name</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+<?php foreach ($rows as $row): ?>
+  <?php $logger->debug("found student {$row['STU_FNAME']}, {$row['STU_LNAME']}"); ?>
+  <tr>
+    <td class="align-middle"><?php echo "{$row['STU_LNAME']}, {$row['STU_FNAME']}" ?></td>
+    <td lass="align-middle">
+      <div class="btn-toolbar" style="float:right">
+        <button class="btn btn-primary d-flex justify-content-center align-content-between mr-1 addclickhandler" action="view.php" stu_num="<?php echo "{$row['STU_NUM']}"?>"><span class="material-icons">visibility</span>&nbsp;View</button>
+        <button class="btn btn-success d-flex justify-content-center align-content-between mr-1 addclickhandler" action="edit.php" stu_num="<?php echo "{$row['STU_NUM']}"?>"><span class="material-icons">mode_edit</span>&nbsp; Edit</button>
+        <button class="btn btn-danger d-flex justify-content-center align-content-between addclickhandler" action="delete.php" stu_num="<?php echo "{$row['STU_NUM']}"?>"><span class="material-icons">delete</span>&nbsp;Delete</button>
+      </div>
+    </td>
+  </tr>
+<?php endforeach; ?>
+          </tbody>
+        </table>
       </div>
     </div>
-  </div>
-</div>
-
-<div class="row mt-4">
-  <div class="col-lg-12">
-    <h3>Here's some output from the form.</h3>
-    
-      <?php
-        $number = safeParam($_REQUEST, 'number', '10');
-        $number = max(min($number, 50), 1);
-
-        echo "<p>The number is {$number}. So here are ${number} lines of output:</p>\n<ul>\n";
-        for ($i = 0; $i < $number; ++$i) {
-          echo "  <li> This line $i </li>\n";
-        }
-        echo "</ul>";
-      ?>
-
-  </div>
-</div>
+<?php else: ?>
+      <div class="row">
+        <div class="col-lg-12">
+          <p>No results found</p>
+        </div>
+      </div>
+<?php
+    endif;
+  endif;
+?>
+<!-- see the "custom.js" file for how this form gets modified by JavaScript
+     using custom attributes on the buttons in the table -->
+<form action="this_is_replaced_by_javascript" method="post" id="studentform">
+  <input type="hidden" id="stu_num" name="stu_num" value="">
+  <input type="hidden" name="first_name_holder" value="<?php echo $first_name ?>">
+  <input type="hidden" name="last_name_holder" value="<?php echo $last_name ?>">
+</form>
     
 <?php
   include 'include/footer.html';

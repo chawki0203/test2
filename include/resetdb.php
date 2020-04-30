@@ -5,7 +5,6 @@
   $output = `sqlite3 {$dbFilename}.db3 < {$dbFilename}.sql 2>&1`;
   if ($output) {
     debug($output);
-  } else {
-    debug($output);//redirect("/");
   }
+  redirect("/");
 ?>

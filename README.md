@@ -1,3 +1,6 @@
-# WEBD 236 homework starter
+# WEBD 236 MicroUniversity database
 
-This is a minimal homework starter. You can write whatever you want here.
+Goals are:
+  - Work with databases and PDO
+  - Simple workflow for queries
+  - Work with SQLite
