@@ -26,12 +26,21 @@
   );
 
 ?>
-      <div class="row">
-        <div class="col-lg-8 offset-2">
-          <form action="index.php" method="post">
-            
-          </form>
-          <p>Advisor: <?php echo "{$advisor['EMP_LNAME']}, {$advisor['EMP_FNAME']}"; ?></p>
+<div class="row">
+  <div class="col-lg-12">
+    <form>
+
+<?php foreach($fields as $field => $description): ?>
+      <div class="form-group">
+        <label for="<?php echo "{$field}"; ?>"><?php echo "{$description}"; ?></label>
+        <input type="text" min="1" id="<?php echo "{$field}"; ?>" name="<?php echo "{$field}"; ?>" class="form-control" value="<?php echo $student[$field]; ?>" disabled />
+      </div>
+<?php endforeach; ?>
+  
+    </form>
+    <p>Advisor: <?php echo "{$advisor['EMP_LNAME']}, {$advisor['EMP_FNAME']}"; ?></p>
+    <button class="btn btn-primary d-flex justify-content-center align-content-between mr-1" onclick="get('/index.php')"><span class="material-icons">arrow_back</span>&nbsp;Back</button>
+
         </div>
       </div>
 <?php
