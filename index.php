@@ -1,7 +1,9 @@
 <?php
   include_once 'include/config.php';
-  include 'include/util.php';
-  include 'include/db.php';
+  include_once 'include/util.php';
+  include_once 'include/db.php';
+  include_once 'include/Logger.php';
+
   include 'include/header.html';
 
   $logger = Logger::instance();
@@ -9,8 +11,8 @@
   $logger->debug(array("pi" => 3.14159, "e" => 2.71828, "i" => "SQRT(-1)"));
   $logger->debug(array(2, 3, 5, 7, 11, array("pi" => 3.14159, "e" => 2.71828, "i" => "SQRT(-1)")));
 
-  $first_name = safeParam("first_name", "");
-  $last_name = safeParam("last_name", "");
+  $first_name = safeParam($_REQUEST, "first_name", "");
+  $last_name = safeParam($_REQUEST, "last_name", "");
 ?>
   
       <div class="row">
@@ -54,7 +56,7 @@
     <td class="align-middle"><?php echo "{$row['STU_LNAME']}, {$row['STU_FNAME']}" ?></td>
     <td lass="align-middle">
       <div class="btn-toolbar" style="float:right">
-        <button class="btn btn-primary d-flex justify-content-center align-content-between mr-1 addclickhandler" action="view.php" stu_num="<?php echo "{$row['STU_NUM']}"?>"><span class="material-icons">visibility</span>&nbsp;View</button>
+        <button class="btn btn-primary d-flex justify-content-center align-content-between mr-1 addclickhandler" onclick="get('view.php?ID=<?php echo "{$row['STU_NUM']}"?>'"><span class="material-icons">visibility</span>&nbsp;View</button>
         <button class="btn btn-success d-flex justify-content-center align-content-between mr-1 addclickhandler" action="edit.php" stu_num="<?php echo "{$row['STU_NUM']}"?>"><span class="material-icons">mode_edit</span>&nbsp; Edit</button>
         <button class="btn btn-danger d-flex justify-content-center align-content-between addclickhandler" action="delete.php" stu_num="<?php echo "{$row['STU_NUM']}"?>"><span class="material-icons">delete</span>&nbsp;Delete</button>
       </div>
@@ -75,13 +77,6 @@
     endif;
   endif;
 ?>
-<!-- see the "custom.js" file for how this form gets modified by JavaScript
-     using custom attributes on the buttons in the table -->
-<form action="this_is_replaced_by_javascript" method="post" id="studentform">
-  <input type="hidden" id="stu_num" name="stu_num" value="">
-  <input type="hidden" name="first_name_holder" value="<?php echo $first_name ?>">
-  <input type="hidden" name="last_name_holder" value="<?php echo $last_name ?>">
-</form>
     
 <?php
   include 'include/footer.html';
