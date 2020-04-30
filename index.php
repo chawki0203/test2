@@ -56,9 +56,9 @@
     <td class="align-middle"><?php echo "{$row['STU_LNAME']}, {$row['STU_FNAME']}" ?></td>
     <td lass="align-middle">
       <div class="btn-toolbar" style="float:right">
-        <button class="btn btn-primary d-flex justify-content-center align-content-between mr-1 addclickhandler" onclick="get('view.php?ID=<?php echo "{$row['STU_NUM']}"?>'"><span class="material-icons">visibility</span>&nbsp;View</button>
-        <button class="btn btn-success d-flex justify-content-center align-content-between mr-1 addclickhandler" action="edit.php" stu_num="<?php echo "{$row['STU_NUM']}"?>"><span class="material-icons">mode_edit</span>&nbsp; Edit</button>
-        <button class="btn btn-danger d-flex justify-content-center align-content-between addclickhandler" action="delete.php" stu_num="<?php echo "{$row['STU_NUM']}"?>"><span class="material-icons">delete</span>&nbsp;Delete</button>
+        <button class="btn btn-primary d-flex justify-content-center align-content-between mr-1" onclick="get('view.php?STU_NUM=<?php echo "{$row['STU_NUM']}"?>')"><span class="material-icons">visibility</span>&nbsp;View</button>
+        <button class="btn btn-success d-flex justify-content-center align-content-between mr-1" onclick="get('edit.php?STU_NUM=<?php echo "{$row['STU_NUM']}"?>')"><span class="material-icons">mode_edit</span>&nbsp; Edit</button>
+        <button class="btn btn-danger d-flex justify-content-center align-content-between" onclick="get('delete.php?STU_NUM=<?php echo "{$row['STU_NUM']}"?>')"><span class="material-icons">delete</span>&nbsp;Delete</button>
       </div>
     </td>
   </tr>
